@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { redirect } from 'react-router-dom'
 import { RootState, AppThunk } from '../../app/store'
 import { fetchCount } from './counterAPI'
 

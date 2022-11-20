@@ -15,11 +15,11 @@ declare global {
   }
 }
 const metamask = window.ethereum
-
 const provider = new ethers.providers.Web3Provider(window.ethereum)
 const signer = provider.getSigner()
 
-export const signIn = async (connector: Providers, statement: string) => {
+// connector: Providers ; if other wallets need to be included
+export const signIn = async (statement: string) => {
   let provider: ethers.providers.Web3Provider
   // if (connector === "metamask"){
   await metamask.request({ method: 'eth_requestAccounts' })
@@ -41,7 +41,7 @@ export const signIn = async (connector: Providers, statement: string) => {
   }
 
   // return
-  // const nonce = "you dont have to typecast this anymore. This is implict definition";
+  // const nonce = "yxou dont have to typecast this anymore. This is implict definition";
 
   const message = new SiweMessage({
     domain: document.location.host,
@@ -51,7 +51,8 @@ export const signIn = async (connector: Providers, statement: string) => {
     version: '1',
     statement: statement,
   }).prepareMessage()
-  return { data: await provider.getSigner().signMessage(message) }
+  let signedMessage = await provider.getSigner().signMessage(message)
+  return { data: address }
 }
 // function createSiweMessage (address, statement) {
 //   const message = new SiweMessage({

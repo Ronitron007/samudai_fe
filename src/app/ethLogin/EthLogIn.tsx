@@ -34,10 +34,15 @@ align-self: center;
 export const AppCanvas = styled.div`
 display: flex;
 flex-direction: column;
-justify-content: center;
+&.space-between{
+    justify-content:space-between;
+}
+
+&.center{
+    justify-content: center;
+}
 height:100vh;
 `
-
  
 interface Props{
     logInStatus: LogInStatus
@@ -45,16 +50,17 @@ interface Props{
 
 const LogInwithEth: React.FC<Props> = (props: Props) => {
     const {logInStatus} = props
-    console.log(logInStatus)
     const dispatch = useAppDispatch();
+    const logInClick = () =>{
+        dispatch(myasyncExample("This is a SAMPLE STATEMENT"))
+    }
 return (
-    <AppCanvas>
-    <StyledButton color="primary" className="primary" onClick={()=>{dispatch(myasyncExample("THIS IS A SAMPLE STATEMENT"))}}> 
+    <AppCanvas className='center'>
+    <StyledButton color="primary" className="primary" onClick={()=>logInClick()}> 
     {logInStatus ==="logged_out" ?  "Sign in to eth with Metamask": "Signing In..." } 
     <span className="material-symblols material-icons">wallet</span></StyledButton>
    {logInStatus==="loading" && <div className="py-3 alert alert-danger">"Please Complete the Metamask Log In to continue"</div>}</AppCanvas>
 )
-
 }
 
  export default LogInwithEth;

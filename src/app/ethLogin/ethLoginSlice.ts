@@ -1,10 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState, AppThunk } from '../../app/store'
-import {
-  fetchCount,
-  Providers,
-  signIn,
-} from '../../features/counter/counterAPI'
+import { signIn } from '../../features/counter/counterAPI'
 
 export interface CounterState {
   value: number
@@ -34,7 +30,8 @@ export const myasyncExample = createAsyncThunk(
   'eth/signIn',
   async (statement: string) => {
     console.log(statement)
-    return await signIn(Providers.METAMASK, statement)
+    // signIn(Providers.METAMASK, statement)
+    return await signIn(statement)
   }
 )
 
@@ -69,7 +66,6 @@ export const LogInSlice = createSlice({
         state.logInStatus = 'loading'
       })
       .addCase(myasyncExample.fulfilled, (state, action) => {
-        console.log('herherehrerhehrere', state.logInStatus)
         state.logInStatus = 'logged_in'
         state.member = action.payload.data
       })
@@ -84,9 +80,11 @@ export const { setLoading } = LogInSlice.actions
 export default LogInSlice.reducer
 // export const { increment, decrement, incrementByAmount } = counterSlice.actions
 
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
+// The function below is called a SELECTOR FUNCTION and allows us to select a value from
+// the state.
+//Selectors can also be defined inline where they're used instead of
+// in the slice file.
+//For example: `useSelector((state: RootState) => state.counter.value)`
 export const selectCount = (state: RootState) => state.counter.value
 export const getLogInStatus = (state: RootState) => state.logIn.logInStatus
 export const getMember = (state: RootState) => state.logIn.member

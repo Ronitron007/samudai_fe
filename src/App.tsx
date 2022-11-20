@@ -15,15 +15,16 @@ function App() {
 
   useEffect(() => {
     if(member){
-    navigate(`/home`)}
+    navigate(`/dashboard`)}
   },[member])
+  
   
 
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<LogInwithEth logInStatus={logInStatus} />} />
-        <Route path={`/home`} element={<Dashboard member={member}/>} />
+        <Route path={`/dashboard`} element={<Dashboard member={member}/>} />
       </Routes>
     </div>
   );
