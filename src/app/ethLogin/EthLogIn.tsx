@@ -5,7 +5,7 @@ import { SiweMessage } from 'siwe';
 import { Button } from "reactstrap";
 import styled from 'styled-components'; 
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { getLogInStatus, LogInStatus, myasyncExample } from "./ethLoginSlice";
+import { getLogInStatus, LogInStatus, logInFlow } from "./ethLoginSlice";
 import {
     BrowserRouter as Router,
     Routes,
@@ -52,7 +52,7 @@ const LogInwithEth: React.FC<Props> = (props: Props) => {
     const {logInStatus} = props
     const dispatch = useAppDispatch();
     const logInClick = () =>{
-        dispatch(myasyncExample("This is a SAMPLE STATEMENT"))
+        dispatch(logInFlow("This is a SAMPLE STATEMENT"))
     }
 return (
     <AppCanvas className='center'>

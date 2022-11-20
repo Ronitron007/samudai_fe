@@ -19,7 +19,7 @@ interface APIParams<PAYLOAD_TYPE> {
   payload: PAYLOAD_TYPE | null
 }
 
-export default async function apicall(params: APIParams<null>) {
+export default async function apicall(params: APIParams<any>) {
   const { url, method, payload } = params
   return axios({
     url,

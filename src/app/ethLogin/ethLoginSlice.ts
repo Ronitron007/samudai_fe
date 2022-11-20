@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Url } from 'url'
 import { RootState, AppThunk } from '../../app/store'
+import apicall from '../../features/counter/api'
 import { signIn } from '../../features/counter/counterAPI'
 
 export interface CounterState {
@@ -11,15 +13,55 @@ export interface CounterState {
 //   value: 0,
 //   status: 'idle',
 // }
-interface member {
+export interface member {
   member_id: string
+  username: string | null
+  did: ''
+  open_for_opportunity: boolean
+  captain: boolean
+  name: null | string
+  email: string
+  phone: null | number | string
+  about: null | string
+  skills: string[] | []
+  profile_picture: null | Url | string
+  ceramic_stream: null
+  subdomain: null
+  discord: {
+    discord_user_id: ''
+    username: ''
+    avatar: ''
+    discriminator: ''
+    locale: ''
+    email: ''
+  }
+  wallets: [
+    {
+      wallet_id: number
+      wallet_address: string
+      chain_id: number
+      default: boolean
+    }
+  ]
+  default_wallet: {
+    id: number
+    member_id: string
+    wallet_address: string
+    chain_id: number
+    default: boolean
+  }
+  default_wallet_address: string
+  invite_code: string
+  invite_count: number
+  created_at: string
+  updated_at: null | string
 }
 
 export type LogInStatus = 'logged_out' | 'loading' | 'logged_in'
 
 interface LogInState {
   logInStatus: LogInStatus
-  member: string | null
+  member: member | null
 }
 const initialState: LogInState = {
   logInStatus: 'logged_out',
@@ -35,6 +77,19 @@ export const myasyncExample = createAsyncThunk(
   }
 )
 
+const internalSignIn = createAsyncThunk(
+  'eth/internalSignIn',
+  async (payload: any) => {
+    const { data: walletAddress } = payload
+    let member = await apicall({
+      url: `https://dev-gcn.samudai.xyz/api/member/demo/login`,
+      method: 'POST',
+      payload: { walletAddress: walletAddress, chainId: 1 },
+    })
+    return member
+  }
+)
+
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
@@ -46,8 +101,10 @@ export const logInFlow =
   (dispatch, getState) => {
     const currentStatus = getLogInStatus(getState())
     if (currentStatus === 'logged_out') {
-      dispatch(setLoading())
-      dispatch(myasyncExample(statement))
+      let signInExternal = dispatch(myasyncExample(statement)).then((resp) => {
+        const { payload } = resp
+        dispatch(internalSignIn(payload))
+      })
     }
   }
 
@@ -65,12 +122,12 @@ export const LogInSlice = createSlice({
         console.log(state.logInStatus, 'we loading')
         state.logInStatus = 'loading'
       })
-      .addCase(myasyncExample.fulfilled, (state, action) => {
-        state.logInStatus = 'logged_in'
-        state.member = action.payload.data
-      })
       .addCase(myasyncExample.rejected, (state) => {
         state.logInStatus = 'logged_out'
+      })
+      .addCase(internalSignIn.fulfilled, (state, action) => {
+        state.logInStatus = 'logged_in'
+        state.member = action.payload.data.member
       })
   },
 })

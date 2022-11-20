@@ -2,13 +2,14 @@ import { compose } from '@reduxjs/toolkit';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppCanvas } from '../ethLogin/EthLogIn';
+import { member } from '../ethLogin/ethLoginSlice';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import BlockHeightWidget from './BlockHeightWidget';
 import { getLatestBlockHeight, getTransactions, selectLatesBlockHeight, selectTransactions } from './dasbooardSlice';
 import TransactionsWidget from './TransactionsWidget';
 
 interface Props{
-    member: string | null
+    member: member| null
 }
 
 
@@ -23,9 +24,8 @@ const Dashboard: React.FC<Props> = (props) =>{
     },30000)
     useEffect(()=>{
         if(member){
-        dispatch(getTransactions(props.member))}
+        dispatch(getTransactions(member.default_wallet_address))}
         dispatch(getLatestBlockHeight())
-        console.log(props.member)
         if(!member){
             navigate('/')
         }
