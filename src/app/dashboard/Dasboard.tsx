@@ -22,10 +22,11 @@ const Dashboard: React.FC<Props> = (props) =>{
         dispatch(getLatestBlockHeight())
     },30000)
     useEffect(()=>{
-        dispatch(getTransactions())
+        if(member){
+        dispatch(getTransactions(props.member))}
         dispatch(getLatestBlockHeight())
+        console.log(props.member)
         if(!member){
-            console.log("asdfsa")
             navigate('/')
         }
         return clearInterval(intervalForBlockHeight)

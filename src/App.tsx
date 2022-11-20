@@ -18,8 +18,6 @@ function App() {
     navigate(`/dashboard`)}
   },[member])
   
-  
-
   return (
     <div className="App">
       <Routes>
